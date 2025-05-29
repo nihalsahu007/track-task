@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Notifications</title>
+</head>
+<body>
+    <h1>Real-time Notifications</h1>
+    <ul id="notifications"></ul>
+
+    <script>
+        const notificationList = document.getElementById("notifications");
+
+        const socket = new WebSocket('ws://' + window.location.host + '/ws/tasks/');
+        console.log('ws://' + window.location.host + '/ws/tasks/' + '>>>>>>>>')
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const item = document.createElement("li");
+            item.textContent = data.message;
+            notificationList.appendChild(item);
+            console.log(event)
+        };
+
+        socket.onopen = function() {
+            console.log("WebSocket connected.");
+        };
+
+        socket.onerror = function(error) {
+            console.error("WebSocket error:", error);
+        };
+
+        socket.onclose = function(event) {
+            console.log("WebSocket closed:", event);
+        };
+    </script>
+</body>
+</html>
